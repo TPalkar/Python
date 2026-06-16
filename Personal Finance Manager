@@ -1,192 +1,199 @@
 import csv
 import matplotlib.pyplot as plt
 
-print("Welcome to the Personal Financial Manager\n")
-print("Menu:")
-print("1. Daily Expense Tracker")
-print("2. Budget Monitoring")
-print("3. Savings Tracker")
-print("4. Report")
+while True:
+    print("\nWelcome to the Personal Financial Manager\n")
+    print("Menu:")
+    print("1. Daily Expense Tracker")
+    print("2. Budget Monitoring")
+    print("3. Savings Tracker")
+    print("4. Report")
+    print("5. Exit")
 
-choice = int(input("Select an option: "))
+    choice = int(input("Select an option: "))
 
-if choice == 1:
-    print("\nDaily Expense Tracker")
-    print("Choose a category of your expense:\n")
+    if choice == 1:
+        print("\nDaily Expense Tracker")
+        print("Choose a category of your expense:\n")
 
-    categories = {
-        "Food": ["Groceries", "Dining Out", "Drinks"],
-        "Transportation": ["Fuel", "Public Transport", "Ride Sharing"],
-        "Housing": ["Rent or Loan", "Utilities", "Maintenance"],
-        "Entertainment": ["Movies", "Concerts/Events", "Subscriptions"],
-        "Health & Fitness": ["Gym Membership", "Sports", "Medical Expenses"],
-        "Personal Care": ["Haircuts", "Spa", "Skincare/Cosmetics"],
-        "Clothing": ["New Clothes", "Shoes", "Accessories"],
-        "Education": ["Books", "Courses", "Supplies"],
-        "Savings & Investments": ["Retirement Savings", "Stocks/Bonds", "Emergency Fund"],
-        "Gifts & Donations": ["Charitable Donations", "Gifts for Others"],
-        "Insurance": ["Health Insurance", "Car Insurance", "Home Insurance"],
-        "Miscellaneous": ["Pet Care", "Other"]
-    }
+        categories = {
+            "Food": ["Groceries", "Dining Out", "Drinks"],
+            "Transportation": ["Fuel", "Public Transport", "Ride Sharing"],
+            "Housing": ["Rent or Loan", "Utilities", "Maintenance"],
+            "Entertainment": ["Movies", "Concerts/Events", "Subscriptions"],
+            "Health & Fitness": ["Gym Membership", "Sports", "Medical Expenses"],
+            "Personal Care": ["Haircuts", "Spa", "Skincare/Cosmetics"],
+            "Clothing": ["New Clothes", "Shoes", "Accessories"],
+            "Education": ["Books", "Courses", "Supplies"],
+            "Savings & Investments": ["Retirement Savings", "Stocks/Bonds", "Emergency Fund"],
+            "Gifts & Donations": ["Charitable Donations", "Gifts for Others"],
+            "Insurance": ["Health Insurance", "Car Insurance", "Home Insurance"],
+            "Miscellaneous": ["Pet Care", "Other"]
+        }
 
-    category_list = list(categories.keys())
+        category_list = list(categories.keys())
 
-    for i, category in enumerate(category_list, start=1):
-        print(f"{i}. {category}")
+        for i, category in enumerate(category_list, start=1):
+            print(f"{i}. {category}")
 
-    cat_choice = int(input("\nSelect a category number: "))
-    selected_category = category_list[cat_choice - 1]
+        cat_choice = int(input("\nSelect a category number: "))
+        selected_category = category_list[cat_choice - 1]
 
-    print(f"\nSubcategories in {selected_category}:")
+        print(f"\nSubcategories in {selected_category}:")
 
-    subcategories = categories[selected_category]
+        subcategories = categories[selected_category]
 
-    for i, sub in enumerate(subcategories, start=1):
-        print(f"{i}. {sub}")
+        for i, sub in enumerate(subcategories, start=1):
+            print(f"{i}. {sub}")
 
-    sub_choice = int(input("\nSelect a subcategory number: "))
-    selected_subcategory = subcategories[sub_choice - 1]
+        sub_choice = int(input("\nSelect a subcategory number: "))
+        selected_subcategory = subcategories[sub_choice - 1]
 
-    amount = float(input("Enter expense amount: "))
+        amount = float(input("Enter expense amount: "))
 
-    import csv
+        expense = {
+            "category": selected_category,
+            "subcategory": selected_subcategory,
+            "amount": amount
+        }
 
-    expense = {
-        "category": selected_category,
-        "subcategory": selected_subcategory,
-        "amount": amount
-    }
+        with open("expenses.csv", "a", newline="") as file:
+            writer = csv.writer(file)
 
-    with open("expenses.csv", "a", newline="") as file:
-        writer = csv.writer(file)
+            if file.tell() == 0:
+                writer.writerow(["Category", "Subcategory", "Amount"])
 
-        if file.tell() == 0:
-            writer.writerow(["Category", "Subcategory", "Amount"])
+            writer.writerow([
+                expense["category"],
+                expense["subcategory"],
+                expense["amount"]
+            ])
 
-        writer.writerow([
-            expense["category"],
-            expense["subcategory"],
-            expense["amount"]
-        ])
+        print("\nExpense Recorded Successfully!")
 
-    print("\nExpense Recorded Successfully!")
+    elif choice == 2:
+        print("\nBudget Monitoring")
 
-elif choice == 2:
-    print("\nBudget Monitoring")
+        salary = float(input("Enter your monthly salary: "))
 
-    salary = float(input("Enter your monthly salary: "))
+        print("\nRecommended Budget Rule:")
+        print("50% for Needs")
+        print("30% for Wants")
+        print("20% for Savings")
 
-    print("\nRecommended Budget Rule:")
-    print("50% for Needs")
-    print("30% for Wants")
-    print("20% for Savings")
+        budget = float(input("\nEnter your monthly budget: "))
 
-    budget = float(input("\nEnter your monthly budget: "))
+        ideal_needs = 0.5 * salary
+        ideal_wants = 0.3 * salary
+        ideal_savings = 0.2 * salary
 
-    ideal_needs = 0.5 * salary
-    ideal_wants = 0.3 * salary
-    ideal_savings = 0.2 * salary
+        ideal_budget = ideal_needs + ideal_wants
 
-    ideal_budget = ideal_needs + ideal_wants
+        print("\nRecommendation:")
+        print(f"Needs: {ideal_needs}")
+        print(f"Wants: {ideal_wants}")
+        print(f"Savings: {ideal_savings}")
+        print(f"Ideal Spending Budget: {ideal_budget}")
 
-    print("\nRecommendation:")
-    print(f"Needs: {ideal_needs}")
-    print(f"Wants: {ideal_wants}")
-    print(f"Savings: {ideal_savings}")
-    print(f"Ideal Spending Budget: {ideal_budget}")
-
-    if budget > ideal_budget:
-        excess = budget - ideal_budget
-        print(f"\nBudget exceeded by {excess:.2f}")
-    elif budget < ideal_budget:
-        remaining = ideal_budget - budget
-        print(f"\nBudget is within the recommended limit.")
-        print(f"{remaining:.2f} still available within your ideal budget.")
-    else:
-        print("\nYour budget exactly matches the recommended budget.")
-
-elif choice == 3:
-    print("\nSavings Tracker")
-
-    try:
-        with open("savings_goal.txt", "r") as file:
-            saving_goal = float(file.read())
-            print(f"Your savings goal is: {saving_goal}")
-
-    except FileNotFoundError:
-        saving_goal = float(input("Enter your savings goal: "))
-        with open("savings_goal.txt", "w") as file:
-            file.write(str(saving_goal))
-        print("Savings goal saved successfully!")
-
-    try:
-        with open("saved_amount.txt", "r") as file:
-            saved_amount = float(file.read())
-    except FileNotFoundError:
-        saved_amount = 0
-
-    print(f"Current savings: {saved_amount}")
-
-    new_amount = float(input("Enter the amount you want to add to your savings: "))
-    saved_amount += new_amount
-
-    with open("saved_amount.txt", "w") as file:
-        file.write(str(saved_amount))
-
-    tracking = (saved_amount / saving_goal) * 100
-
-    print(f"\nTotal Savings: {saved_amount}")
-    print(f"Savings Progress: {tracking:.2f}%")
-
-    if tracking >= 100:
-        print("Congratulations! You have achieved your savings goal.")
-
-elif choice == 4:
-    print('Report')
-    category_totals = {}
-
-    try:
-        with open("expenses.csv", "r") as file:
-            reader = csv.DictReader(file)
-
-            for row in reader:
-                category = row["Category"]
-                amount = float(row["Amount"])
-
-                if category in category_totals:
-                    category_totals[category] += amount
-                else:
-                    category_totals[category] = amount
-
-        if not category_totals:
-            print("No expense records found.")
+        if budget > ideal_budget:
+            excess = budget - ideal_budget
+            print(f"\nBudget exceeded by {excess:.2f}")
+        elif budget < ideal_budget:
+            remaining = ideal_budget - budget
+            print("\nBudget is within the recommended limit.")
+            print(f"{remaining:.2f} still available within your ideal budget.")
         else:
-            print("\nExpense Summary:")
-            total_expense = 0
+            print("\nYour budget exactly matches the recommended budget.")
 
-            for category, amount in category_totals.items():
-                print(f"{category}: {amount:.2f}")
-                total_expense += amount
+    elif choice == 3:
+        print("\nSavings Tracker")
 
-            print(f"\nTotal Expenses: ₹{total_expense:.2f}")
+        try:
+            with open("savings_goal.txt", "r") as file:
+                saving_goal = float(file.read())
+                print(f"Your savings goal is: {saving_goal}")
 
-            plt.figure(figsize=(10, 5))
-            plt.bar(category_totals.keys(), category_totals.values(), color="skyblue")
-            plt.title("Expenses by Category")
-            plt.xlabel("Category")
-            plt.ylabel("Amount ()")
-            plt.xticks(rotation=45)
-            plt.tight_layout()
-            plt.show()
+        except FileNotFoundError:
+            saving_goal = float(input("Enter your savings goal: "))
+            with open("savings_goal.txt", "w") as file:
+                file.write(str(saving_goal))
+            print("Savings goal saved successfully!")
 
-            plt.figure(figsize=(8, 8))
-            plt.pie(
-                category_totals.values(),
-                labels=category_totals.keys(),
-                autopct="%1.1f%%"
-            )
-            plt.title("Expense Distribution")
-            plt.show()
+        try:
+            with open("saved_amount.txt", "r") as file:
+                saved_amount = float(file.read())
+        except FileNotFoundError:
+            saved_amount = 0
 
-    except FileNotFoundError:
-        print("No expense data available. Please add expenses first.")
+        print(f"Current savings: {saved_amount}")
+
+        new_amount = float(input("Enter the amount you want to add to your savings: "))
+        saved_amount += new_amount
+
+        with open("saved_amount.txt", "w") as file:
+            file.write(str(saved_amount))
+
+        tracking = (saved_amount / saving_goal) * 100
+
+        print(f"\nTotal Savings: {saved_amount}")
+        print(f"Savings Progress: {tracking:.2f}%")
+
+        if tracking >= 100:
+            print("Congratulations! You have achieved your savings goal.")
+
+    elif choice == 4:
+        print("Report")
+        category_totals = {}
+
+        try:
+            with open("expenses.csv", "r") as file:
+                reader = csv.DictReader(file)
+
+                for row in reader:
+                    category = row["Category"]
+                    amount = float(row["Amount"])
+
+                    if category in category_totals:
+                        category_totals[category] += amount
+                    else:
+                        category_totals[category] = amount
+
+            if not category_totals:
+                print("No expense records found.")
+            else:
+                print("\nExpense Summary:")
+                total_expense = 0
+
+                for category, amount in category_totals.items():
+                    print(f"{category}: {amount:.2f}")
+                    total_expense += amount
+
+                print(f"\nTotal Expenses: ₹{total_expense:.2f}")
+
+                plt.figure(figsize=(10, 5))
+                plt.bar(category_totals.keys(), category_totals.values(), color="skyblue")
+                plt.title("Expenses by Category")
+                plt.xlabel("Category")
+                plt.ylabel("Amount (₹)")
+                plt.xticks(rotation=45)
+                plt.tight_layout()
+                plt.show()
+
+                plt.figure(figsize=(8, 8))
+                plt.pie(
+                    category_totals.values(),
+                    labels=category_totals.keys(),
+                    autopct="%1.1f%%"
+                )
+                plt.title("Expense Distribution")
+                plt.show()
+
+        except FileNotFoundError:
+            print("No expense data available. Please add expenses first.")
+
+    elif choice == 5:
+        print("\nThank you for using Personal Financial Manager!")
+        break
+
+    else:
+        print("\nInvalid choice. Please select a number from 1 to 5.")
